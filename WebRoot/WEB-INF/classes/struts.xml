@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- 配置为开发模式 -->
+	<constant name="struts.devMode" value="true" />
+	<!-- 把扩展名配置为action -->
+	<constant name="struts.action.extension" value="action" />
+	<!-- 把主题配置为simple -->
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.multipart.maxSize" value="1097152000" />
+
+
+	<package name="default" namespace="/" extends="struts-default">
+
+		<interceptors>
+			<!-- 声明拦截器 -->
+			<interceptor name="checkPrivilege"
+				class="com.sc.oa.util.CheckPrivilegeInterceptor"></interceptor>
+
+			<!-- 重新定义默认的拦截器栈 -->
+			<interceptor-stack name="defaultStack">
+				<interceptor-ref name="checkPrivilege"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+
+		<!-- 全局的Result配置 -->
+		<global-results>
+			<result name="loginUI">/WEB-INF/jsp/userAction/loginUI.jsp</result>
+			<result name="noPrivilegeError">/noPrivilegeError.jsp</result>
+		</global-results>
+
+
+		<!-- 配置测试用的Action，未与Spring整合，class属性写类的全名 -->
+		<!-- 当Struts2与Spring整合后，class属性可以写bean的名称 -->
+		<action name="test" class="testAction">
+			<result name="success">/test.jsp</result>
+		</action>
+
+
+		<!-- 角色管理 -->
+		<action name="role_*" class="roleAction" method="{1}">
+			<result name="list">/WEB-INF/jsp/roleAction/list.jsp</result>
+			<result name="saveUI">/WEB-INF/jsp/roleAction/saveUI.jsp</result>
+			<result name="setPrivilegeUI">/WEB-INF/jsp/roleAction/setPrivilegeUI.jsp
+			</result>
+			<result name="toList" type="redirectAction">role_list</result>
+		</action>
+
+
+		<!-- 部门管理 -->
+		<action name="department_*" class="departmentAction" method="{1}">
+			<result name="list">/WEB-INF/jsp/departmentAction/list.jsp</result>
+			<result name="saveUI">/WEB-INF/jsp/departmentAction/saveUI.jsp</result>
+			<result name="detail">/WEB-INF/jsp/departmentAction/detail.jsp</result>
+			<result name="toList" type="redirectAction">department_list?parentId=${parentId}
+			</result>
+		</action>
+
+
+		<!-- 用户管理 -->
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="list">/WEB-INF/jsp/userAction/list.jsp</result>
+			<result name="saveUI">/WEB-INF/jsp/userAction/saveUI.jsp</result>
+			<result name="toList" type="redirectAction">user_list</result>
+			<result name="import">/WEB-INF/jsp/userAction/import.jsp</result>
+			<result name="logout">/WEB-INF/jsp/userAction/logout.jsp</result>
+			<result name="toIndex" type="redirect">/index.jsp</result>
+		</action>
+		
+		<!-- 用户个人信息修改 -->
+		<action name="userinfo_*" class="userinfoAction" method="{1}">
+			<result name="update">/WEB-INF/jsp/userinfoAction/updateme.jsp</result>
+			<result name="xgpass">/WEB-INF/jsp/userinfoAction/xgpass.jsp</result>
+		</action>
+
+
+		<!-- 首页 -->
+		<action name="home_*" class="homeAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/homeAction/{1}.jsp</result>
+		</action>
+
+
+		<!-- 论坛：版块管理 -->
+		<action name="forumManage_*" class="forumManageAction" method="{1}">
+			<result name="list">/WEB-INF/jsp/forumManageAction/list.jsp</result>
+			<result name="saveUI">/WEB-INF/jsp/forumManageAction/saveUI.jsp
+			</result>
+			<result name="toList" type="redirectAction">forumManage_list</result>
+		</action>
+
+
+		<!-- 论坛：版块相关功能 -->
+		<action name="forum_*" class="forumAction" method="{1}">
+			<result name="list">/WEB-INF/jsp/forumAction/list.jsp</result>
+			<result name="show">/WEB-INF/jsp/forumAction/show.jsp</result>
+		</action>
+
+		<!-- 论坛：主题相关功能 -->
+		<action name="topic_*" class="topicAction" method="{1}">
+			<result name="show">/WEB-INF/jsp/topicAction/show.jsp</result>
+			<result name="addUI">/WEB-INF/jsp/topicAction/addUI.jsp</result>
+			<result name="toShow" type="redirectAction">topic_show?id=${id}</result>
+			<result name="setJingHua" type="redirectAction">topic_show?id=${topicId}
+			</result>
+			<result name="setPuTong" type="redirectAction">topic_show?id=${topicId}
+			</result>
+			<result name="setZhiDing" type="redirectAction">topic_show?id=${topicId}
+			</result>
+			<result name="delTopic" type="redirectAction">forum_show?id=${forumId}</result>
+		</action>
+		<!-- 论坛：回复相关功能 -->
+		<action name="reply_*" class="replyAction" method="{1}">
+			<result name="addUI">/WEB-INF/jsp/replyAction/addUI.jsp</result>
+			<result name="toTopicShow" type="redirectAction">topic_show?id=${topicId}
+			</result>
+			<result name="delReply" type="redirectAction">topic_show?id=${topicId}</result>
+		</action>
+
+		<!-- 文档管理 -->
+		<action name="document_*" class="documentAction" method="{1}">
+			<result name="alldocu">/WEB-INF/jsp/documentAction/alldocu.jsp</result>
+			<result name="medocu">/WEB-INF/jsp/documentAction/medocu.jsp</result>
+			<result name="adddocu">/WEB-INF/jsp/documentAction/adddocu.jsp</result>
+			<result name="tomedocu" type="redirectAction">document_medocu</result>
+			<result name="resavedocu">/WEB-INF/jsp/documentAction/resavedocu.jsp
+			</result>
+			<result name="toresavedocu" type="redirectAction">document_resavedocu</result>
+		</action>
+
+		<!-- 公告管理 -->
+		<action name="notice_*" class="noticeAction" method="{1}">
+			<result name="notlist">/WEB-INF/jsp/noticeAction/notlist.jsp</result>
+			<result name="addnot">/WEB-INF/jsp/noticeAction/addnot.jsp</result>
+			<result name="tomenotlist" type="redirectAction">notice_menotlist</result>
+			<result name="editnot">/WEB-INF/jsp/noticeAction/editnot.jsp</result>
+			<result name="menotlist">/WEB-INF/jsp/noticeAction/menotlist.jsp</result>
+		</action>
+
+		<!-- 便签管理 -->
+		<action name="tag_*" class="tagAction" method="{1}">
+			<result name="showTag">/WEB-INF/jsp/tagAction/taglist.jsp</result>
+			<result name="toSave">/WEB-INF/jsp/tagAction/addTag.jsp
+			</result>
+			<result name="toShowTag" type="redirectAction">tag_allList</result>
+		</action>
+
+		<!-- 请假管理 -->
+		<action name="qingjia_*" class="qingjiaAction" method="{1}">
+			<result name="list1">/WEB-INF/jsp/qingjiaAction/list1.jsp</result>
+			<result name="list2">/WEB-INF/jsp/qingjiaAction/list2.jsp</result>
+			<result name="appuserlist">/WEB-INF/jsp/qingjiaAction/appuserlist.jsp
+			</result>
+			<result name="apply">/WEB-INF/jsp/qingjiaAction/apply.jsp</result>
+			<result name="update">/WEB-INF/jsp/qingjiaAction/update.jsp</result>
+			<result name="check">/WEB-INF/jsp/qingjiaAction/check.jsp</result>
+			<result name="scan">/WEB-INF/jsp/qingjiaAction/scan.jsp</result>
+			<result name="toList" type="redirectAction">qingjia_appuserlist</result>
+			<result name="toList2" type="redirectAction">qingjia_list</result>
+		</action>
+
+		<!--出差管理 -->
+		<action name="business_*" class="businessAction" method="{1}">
+			<result name="list">/WEB-INF/jsp/businessAction/list.jsp</result>
+			<result name="appuserlist">/WEB-INF/jsp/businessAction/appuserlist.jsp
+			</result>
+			<result name="addUI">/WEB-INF/jsp/businessAction/addUI.jsp</result>
+			<result name="update">/WEB-INF/jsp/businessAction/update.jsp</result>
+			<result name="check">/WEB-INF/jsp/businessAction/check.jsp</result>
+			<result name="scan">/WEB-INF/jsp/businessAction/scan.jsp</result>
+			<result name="toList" type="redirectAction">business_appuserlist</result>
+			<result name="toList2" type="redirectAction">business_list</result>
+		</action>
+
+
+		<!--综合行政：会议室管理 -->
+		<action name="meetingroom_*" class="meetingAction" method="{1}">
+			<result name="addUI">/WEB-INF/jsp/meetingAction/addUI.jsp</result>
+			<result name="list">/WEB-INF/jsp/meetingAction/list.jsp</result>
+			<result name="tolist" type="redirectAction">meetingroom_list</result>
+			<result name="editUI">/WEB-INF/jsp/meetingAction/editUI.jsp</result>
+			<result name="applyUI">/WEB-INF/jsp/meetingAction/applyUI.jsp</result>
+			<result name="apply" type="redirectAction">meetingroom_applyUI</result>
+			<result name="orderlist">/WEB-INF/jsp/meetingAction/orderlist.jsp</result>
+			<result name="delApply" type="redirectAction">meetingroom_orderlist</result>
+		</action>
+		<!--综合行政：用章管理 -->
+		<action name="print_*" class="printAction" method="{1}">
+			<result name="applyUI">/WEB-INF/jsp/printAction/applyUI.jsp</result>
+			<result name="apply" type="redirectAction">print_applyUI</result>
+			<result name="list">/WEB-INF/jsp/printAction/list.jsp</result>
+			<result name="addUI">/WEB-INF/jsp/printAction/addUI.jsp</result>
+			<result name="tolist" type="redirectAction">print_list</result>
+			<result name="editUI">/WEB-INF/jsp/printAction/editUI.jsp</result>
+			<result name="orderlist">/WEB-INF/jsp/printAction/orderlist.jsp</result>
+			<result name="backApply" type="redirectAction">print_orderlist</result>
+		</action>
+
+
+		<!-- 日程管理 -->
+		<action name="task_*" class="taskAction" method="{1}">
+			<result name="showTask">/WEB-INF/jsp/taskAction/calendar.jsp</result>
+		</action>
+
+
+	</package>
+
+	<!-- Add packages here -->
+
+</struts>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.sc.oa.domain">
+
+	<class name="QingjiaInfo" table="qingjiainfo">
+		<id name="id">
+			<generator class="native" />
+		</id>
+		
+		<property name="content" />
+		<property name="startTime"/>
+		<property name="endTime"/>
+		
+		<property name="appDate" />
+		
+		<!-- appuser属性，与user的多对一 -->
+		<many-to-one name="appuser" class="User" column="appuserId" ></many-to-one>
+		
+		<property name="state" />
+		<property name="checkDate" />
+
+		<!-- checkuser属性，与user的多对一 -->
+		<many-to-one name="checkuser" class="User" column="checkuserId"></many-to-one>
+		
+
+
+	</class>
+
+</hibernate-mapping>

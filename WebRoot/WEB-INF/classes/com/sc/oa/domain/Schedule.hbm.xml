@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.sc.oa.domain">
+
+	<class name="Schedule" table="schedule">
+		<id name="id">
+            <generator class="native"/>
+		</id>
+		
+		<property name="context" />
+		
+		<!-- appuser属性，与user的多对一-->
+		<many-to-one name="appuser" class="User" column="userId"></many-to-one>
+		
+		<property name="date" />	
+		<property name="state" />	
+	
+
+
+		
+	</class>
+	
+</hibernate-mapping>
